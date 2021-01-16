@@ -1,17 +1,36 @@
-import { IRouterSlot } from "../model";
+import type { IRouterSlot } from "../model";
+
+export interface IAnchorHandler {
+	setup(): void;
+	teardown(): void;
+}
 
 /**
  * The AnchorHandler allows the RouterSlot to observe all anchor clicks
  * and either handle the click or let the browser handle it.
  */
-export class AnchorHandler {
+export class AnchorHandler implements IAnchorHandler {
 	routerSlot?: IRouterSlot;
 
 	constructor(routerSlot?: IRouterSlot) {
 		this.routerSlot = routerSlot;
 	}
 
-	handleEvent(e: MouseEvent) {
+	setup(): void {
+		window.addEventListener(
+			'click',
+			(e) => this.handleEvent(e)
+		);
+	}
+
+	teardown(): void {
+		window.removeEventListener(
+			'click',
+			(e) => this.handleEvent(e)
+		);
+	}
+
+	private handleEvent(e: MouseEvent) {
 		// Find the target by using the composed path to get the element through the shadow boundaries.
 		const $anchor = ("composedPath" in e as any) ? e.composedPath().find($elem => $elem instanceof HTMLAnchorElement) : e.target;
 
