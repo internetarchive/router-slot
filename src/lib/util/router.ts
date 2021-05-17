@@ -47,7 +47,7 @@ export function matchRoute<D = any> (route: IRoute<D>, path: string | PathFragme
 	// All matches starts with ^ to make sure the match is done from the beginning of the path.
 	const regex = route.path === CATCH_ALL_WILDCARD || (route.path.length === 0 && route.pathMatch != "full" ) ? /^/ : (() => {
 		switch (route.pathMatch || DEFAULT_PATH_MATCH) {
-			case "full": return new RegExp(`^${routePath}\/?$`);
+			case "full": return new RegExp(`^\/?${routePath}\/?$`);
 			case "suffix": return new RegExp(`^.*?${routePath}\/?$`);
 			case "fuzzy": return new RegExp(`^.*?${routePath}.*?$`);
 			case "prefix": default: return new RegExp(`^[\/]?${routePath}(?:\/|$)`);
